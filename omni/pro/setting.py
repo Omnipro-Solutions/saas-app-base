@@ -2,16 +2,16 @@ DEBUG = True
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
-    "site_title": "OMS Magento",
-    "site_header": "OMS Magento",
-    "welcome_sign": "Welcome to OMS Magento App",
-    "site_brand": "OMS MAGENTO APP",
-    "copyright": "Omni Pro SAS",
-    # "login_logo": "/img/logo_login.svg",
-    # "custom_css": "/css/main.css",
-    # "custom_js": "/js/main.js",
-    "site_logo": "/img/logo.svg",
-    "site_icon": "/img/favicon.ico",
+    "site_title": "OMS App",
+    "site_header": "OMS App",
+    "welcome_sign": "Welcome to OMS App",
+    "site_brand": "OMS APP",
+    "copyright": "© ATM Services All Rights Reserved",
+    "login_logo": "vendor/omni/img/logo_login.svg",
+    "custom_css": "vendor/omni/css/main.css",
+    "custom_js": "vendor/omni/js/main.js",
+    "site_logo": "vendor/omni/img/logo.svg",
+    "site_icon": "vendor/omni/img/favicon.ico",
     "related_modal_active": True,
     "icons": {
         "auth": "fas fa-users-cog",
