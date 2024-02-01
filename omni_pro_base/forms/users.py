@@ -1,6 +1,5 @@
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-
-from omni.pro.base.models import User
+from omni_pro_base.models import User
 
 
 class UserCreationForm(UserCreationForm):

@@ -1,11 +1,10 @@
 from django.contrib.auth.models import Group
+from omni_pro_base.models import User
+from omni_pro_base.serializers import GroupSerializer, UserLoginSerializer, UserModelSerializer, UserSerializer
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-
-from omni.pro.base.models import User
-from omni.pro.base.serializers import GroupSerializer, UserLoginSerializer, UserModelSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
