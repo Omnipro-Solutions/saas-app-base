@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from base.models import User
+from omni.pro.base.models import User
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
