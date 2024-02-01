@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from base.views import GroupViewSet, UserViewSet
+from omni.pro.base.views import GroupViewSet, UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
