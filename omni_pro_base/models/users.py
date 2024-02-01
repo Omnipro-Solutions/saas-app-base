@@ -1,9 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from .base_model import OmniModel
-from .managers import UserManager
+from omni_pro_base.models.base_model import OmniModel
 
 
 class User(AbstractUser, OmniModel):

@@ -1,9 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.utils.translation import gettext_lazy as _
-from omni.pro.base.models import User
-
-from .base_admin import MixinSaveAdmin
+from omni_pro_base.admin import MixinSaveAdmin
+from omni_pro_base.models import User
 
 
 @admin.register(User)

@@ -1,9 +1,8 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
+from omni_pro_base.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-
-from base.models import User
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
