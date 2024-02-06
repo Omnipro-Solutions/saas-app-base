@@ -21,6 +21,7 @@ INSTALL_REQUIRES = [
     "django-oauth-toolkit==2.3.0",
     "celery==5.3.6",
     "redis==5.0.1",
+    "django-celery-results==2.5.1",
 ]
 # with open(HERE / "requirements.txt") as f:
 #     INSTALL_REQUIRES = f.read().splitlines()

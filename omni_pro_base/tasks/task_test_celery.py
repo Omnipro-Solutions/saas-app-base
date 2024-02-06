@@ -7,7 +7,7 @@ from celery import shared_task, current_task, Celery
 class TaskTestCelery:
 
     @staticmethod
-    @shared_task(name='omni_pro_base.tasks.task_test_celery')
+    @shared_task
     def task_test_celery(x, y):
         try:
             sleep(2)

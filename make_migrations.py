@@ -20,6 +20,7 @@ BASE_APPS = [
 THIRD_PARTY_APPS = [
     "oauth2_provider",
     "rest_framework",
+    "django_celery_results",
 ]
 
 LOCAL_APPS = [
