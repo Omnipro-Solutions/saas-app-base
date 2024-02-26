@@ -60,3 +60,7 @@ OAUTH2_PROVIDER = {
     # this is the list of available scopes
     "SCOPES": {"read": "Read scope", "write": "Write scope"}
 }
+
+# NAME APP
+CELERY_NAME_APP_DJANGO = "omni_pro_base"
+
