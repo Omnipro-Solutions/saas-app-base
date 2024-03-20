@@ -20,6 +20,7 @@ INSTALL_REQUIRES = [
     "djangorestframework==3.14.0",
     "django-oauth-toolkit==2.3.0",
     "django-auditlog==2.3.0",
+    "django-allow-cidr==0.7.1"
 ]
 # with open(HERE / "requirements.txt") as f:
 #     INSTALL_REQUIRES = f.read().splitlines()
