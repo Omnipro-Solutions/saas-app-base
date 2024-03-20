@@ -21,6 +21,7 @@ THIRD_PARTY_APPS = [
     "oauth2_provider",
     "rest_framework",
     "allow_cidr",
+    "health_check",
 ]
 
 LOCAL_APPS = [
