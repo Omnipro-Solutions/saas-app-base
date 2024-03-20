@@ -20,6 +20,7 @@ BASE_APPS = [
 THIRD_PARTY_APPS = [
     "oauth2_provider",
     "rest_framework",
+    "allow_cidr",
 ]
 
 LOCAL_APPS = [
@@ -39,6 +40,7 @@ settings.configure(
     INSTALLED_APPS=INSTALLED_APPS,
     SECRET_KEY="django-insecure-_xm%ar7&b@9n84@bkgiy@m#cl_lhqdgpg*p(+l#ie%8dzw#51+",
     MIDDLEWARE=(
+        "allow_cidr.middleware.AllowCIDRMiddleware",
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.common.CommonMiddleware",
