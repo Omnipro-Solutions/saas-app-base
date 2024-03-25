@@ -145,6 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "omni_pro_base.User"
+LOGIN_REDIRECT_URL = "/admin/"
 
 ADMIN_URL = env.str("ADMIN_URL", default="admin/")
 ADMIN_LOGIN = env.str("ADMIN_LOGIN", default="oms@omni.pro")
