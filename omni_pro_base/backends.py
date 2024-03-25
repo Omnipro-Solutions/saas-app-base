@@ -20,7 +20,7 @@ class SettingsBackend(BaseBackend):
         pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
         if login_valid and pwd_valid:
             try:
-                user = User.objects.get(username=username)
+                user = User.objects.get(email=username)
             except User.DoesNotExist:
                 # Create a new user. There's no need to set a password
                 # because only the password from settings.py is checked.
@@ -51,7 +51,7 @@ class AppUserBackend(BaseBackend):
             )
             response.raise_for_status()
             response_data = response.json()
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=username)
         except User.DoesNotExist:
             user_data = response_data["user"]
             user = User(username=user_data["username"])
@@ -62,7 +62,7 @@ class AppUserBackend(BaseBackend):
             user.is_superuser = user_data["is_superuser"]
             user.is_active = user_data["is_active"]
             user.save()
-        except requests.RequestException:
+        except Exception:
             return None
         return user
 
