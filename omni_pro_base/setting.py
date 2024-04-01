@@ -155,7 +155,8 @@ ADMIN_PASSWORD = env.str(
 ADMIN_USERNAME = env.str("ADMIN_USERNAME", default=ADMIN_LOGIN)
 ADMIN_FIRST_NAME = env.str("ADMIN_FIRST_NAME", default="OMS")
 ADMIN_LAST_NAME = env.str("ADMIN_LAST_NAME", default="OMNI")
-AUTH_APP_SERVICE_URL = env.str("AUTH_APP_SERVICE_URL", default="http://localhost:8000/users/login/")
+AUTH_BASE_URL = env.str("AUTH_BASE_URL", default="http://localhost:8000")
+AUTH_APP_SERVICE_URL = env.str("AUTH_APP_SERVICE_URL", default=f"{AUTH_BASE_URL}/auth/users/login/")
 
 AUTHENTICATION_BACKENDS = [
     "omni_pro_base.backends.SettingsBackend",

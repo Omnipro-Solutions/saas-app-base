@@ -7,7 +7,7 @@ from requests.models import Response
 
 class OmniRequest:
     @staticmethod
-    def call_api(url, http_method, body: dict = {}, params={}, headers={}):
+    def call_api(url, http_method, body: dict = {}, params={}, headers={}, **kwargs):
         request_params = {
             "method": http_method,
             "url": url,
@@ -18,7 +18,7 @@ class OmniRequest:
             request_params["data"] = json.dumps(body).encode("utf-8")
             request_params["headers"]["Content-Type"] = "application/json"
             request_params["headers"]["charset"] = "utf-8"
-        return requests.request(**request_params)
+        return requests.request(**request_params | kwargs)
 
     @staticmethod
     def get_response(response: Response):
