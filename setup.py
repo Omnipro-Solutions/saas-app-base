@@ -23,7 +23,7 @@ INSTALL_REQUIRES = [
     "django-allow-cidr==0.7.1",
     "django-health-check==3.18.1",
     "requests==2.31.0",
-    "dj-database-url==2.1.0"
+    "dj-database-url==2.1.0",
     "psycopg2-binary==2.9.9"
 ]
 # with open(HERE / "requirements.txt") as f:
