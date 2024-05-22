@@ -13,16 +13,17 @@ env.read_env()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str("SECRET_KEY", default="django-insecure--fspfc--yg!p^)bi--2brjgyzb^fmu-3bh-#xxmb7gye7(b1-f")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", default=True)
+# Internationalization
+# https://docs.djangoproject.com/en/5.0/topics/i18n/
+TIME_ZONE = env.str("TIME_ZONE", default="UTC")
+LANGUAGE_CODE = env.str("LANGUAGE_CODE", default="en-us")
+SITE_ID = 1
+USE_I18N = env.bool("USE_I18N", default=True)
+USE_TZ = env.bool("USE_TZ", default=True)
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
-ALLOWED_CIDR_NETS = env.list("ALLOWED_CIDR_NETS", default=["127.0.0.0/21"])
-
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["http://localhost"])
+THEME_APPS = ["jazzmin"]
 
 # Application definition
-
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -31,6 +32,18 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+THIRD_PARTY_APPS = [
+    "oauth2_provider",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "auditlog",
+    "django_json_widget",
+    "omni_pro_base",
+    "omni_pro_oms",
+]
+
+INSTALLED_APPS = THEME_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     "allow_cidr.middleware.AllowCIDRMiddleware",
@@ -41,7 +54,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 TEMPLATES = [
@@ -66,6 +78,7 @@ TEMPLATES = [
 DATABASES = {
     "default": env.dj_db_url("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
@@ -103,6 +116,7 @@ JAZZMIN_SETTINGS["show_ui_builder"] = False
 # Application definition
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
@@ -144,13 +158,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.ScryptPasswordHasher",
+]
+
 AUTH_USER_MODEL = "omni_pro_base.User"
 LOGIN_REDIRECT_URL = "/admin/"
 
 ADMIN_URL = env.str("ADMIN_URL", default="admin/")
 ADMIN_LOGIN = env.str("ADMIN_LOGIN", default="oms@omni.pro")
 ADMIN_PASSWORD = env.str(
-    "ADMIN_PASSWORD", default="pbkdf2_sha256$720000$pNo5LfaIsB1mmcKNwdZFfI$U418YPNlY9dMVKrObnP5QBopxLVRGt6BlKxaFp68YGE="
+    "ADMIN_PASSWORD",
+    default="argon2$argon2id$v=19$m=102400,t=2,p=8$WVlMYVg1ZkJhMDRyV1hkb2hhb1BkdA$xsgpDV8dbFLBKM83JkTxJDCYCk30pbMo35KzwUXo848",
 )
 ADMIN_USERNAME = env.str("ADMIN_USERNAME", default=ADMIN_LOGIN)
 ADMIN_FIRST_NAME = env.str("ADMIN_FIRST_NAME", default="OMS")
@@ -176,17 +199,6 @@ X_FRAME_OPTIONS = "DENY"
 # Email
 EMAIL_BACKEND = env.str("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
-LANGUAGE_CODE = env.str("LANGUAGE_CODE", default="en-us")
-
-TIME_ZONE = env.str("TIME_ZONE", default="UTC")
-
-USE_I18N = env.bool("USE_I18N", default=True)
-
-USE_TZ = env.bool("USE_TZ", default=True)
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -205,3 +217,29 @@ MEDIA_ROOT = env.str("MEDIA_ROOT", default=str(BASE_DIR / "media/"))
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# CONFIGURATION CELERY
+if USE_TZ:
+    CELERY_TIMEZONE = TIME_ZONE
+else:
+    CELERY_TIMEZONE = "UTC"
+
+CELERY_NAME_APP_DJANGO = env.str("CELERY_NAME_APP_DJANGO", default=None)
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0")
+RESULT_BACKEND = env.str("RESULT_BACKEND", default=CELERY_BROKER_URL)
+
+ACCEPT_CONTENT = ["json"]
+RESULT_SERIALIZER = "json"
+TASK_SERIALIZER = "json"
+
+RESULT_PERSISTENT = True
+CELERY_TASK_PERSISTENT = True
+broker_connection_retry_on_startup = True
+
+CELERY_MAX_RETRIES = env.int("CELERY_MAX_RETRIES", default=3)
+CELERY_SECONDS_TIME_TO_RETRY = env.int("CELERY_SECONDS_TIME_TO_RETRY", default=30)
+
+# CONFIGURATION CELERY RESULTS
+RESULT_EXTENDED = True
+CELERY_CACHE_BACKEND = "django-cache"
+CELERY_RESULT_BACKEND = "django-db"
