@@ -6,13 +6,13 @@ from .base import *  # NOQA
 DEBUG = False
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*.omni.pro"])
-ALLOWED_CIDR_NETS = env.list("ALLOWED_CIDR_NETS")
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
+ALLOWED_CIDR_NETS = env.list("ALLOWED_CIDR_NETS", default=[])
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 DJA = len(THEME_APPS + DJANGO_APPS)
 INSTALLED_APPS.insert(DJA, "corsheaders")
 
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
 MIDDLEWARE.insert(4, "corsheaders.middleware.CorsMiddleware")
 
 # whitenoise settings
