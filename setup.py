@@ -22,10 +22,15 @@ INSTALL_REQUIRES = [
     "django-auditlog==2.3.0",
     "django-allow-cidr==0.7.1",
     "django-health-check==3.18.1",
+    "django-celery-results==2.5.1",
     "requests==2.31.0",
     "requests-oauthlib==2.0.0",
     "dj-database-url==2.1.0",
-    "psycopg2-binary==2.9.9"
+    "psycopg2-binary==2.9.9",
+    "whitenoise==6.6.0",
+    "argon2-cffi==23.1.0",
+    "celery==5.3.6",
+    "redis==5.0.1",
 ]
 # with open(HERE / "requirements.txt") as f:
 #     INSTALL_REQUIRES = f.read().splitlines()
