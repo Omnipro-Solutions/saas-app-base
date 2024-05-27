@@ -39,6 +39,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "auditlog",
     "django_json_widget",
+    "django_celery_results",
     "omni_pro_base",
     "omni_pro_oms",
 ]
@@ -226,7 +227,8 @@ else:
 
 CELERY_NAME_APP_DJANGO = env.str("CELERY_NAME_APP_DJANGO", default=None)
 CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0")
-RESULT_BACKEND = env.str("RESULT_BACKEND", default=CELERY_BROKER_URL)
+# RESULT_BACKEND = env.str("RESULT_BACKEND", default=CELERY_BROKER_URL)
+# RESULT_BACKEND = "django-db"
 
 ACCEPT_CONTENT = ["json"]
 RESULT_SERIALIZER = "json"
@@ -240,6 +242,6 @@ CELERY_MAX_RETRIES = env.int("CELERY_MAX_RETRIES", default=3)
 CELERY_SECONDS_TIME_TO_RETRY = env.int("CELERY_SECONDS_TIME_TO_RETRY", default=30)
 
 # CONFIGURATION CELERY RESULTS
-RESULT_EXTENDED = True
+CELERY_RESULT_EXTENDED = True
 CELERY_CACHE_BACKEND = "django-cache"
 CELERY_RESULT_BACKEND = "django-db"
