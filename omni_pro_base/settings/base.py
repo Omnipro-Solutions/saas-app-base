@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from environs import Env
+from kombu import Queue as kombuQueue
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -229,6 +230,18 @@ CELERY_NAME_APP_DJANGO = env.str("CELERY_NAME_APP_DJANGO", default=None)
 CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0")
 # RESULT_BACKEND = env.str("RESULT_BACKEND", default=CELERY_BROKER_URL)
 # RESULT_BACKEND = "django-db"
+
+# QUEUE
+# Celery settings
+CELERY_NAME_QUEUE = CELERY_NAME_APP_DJANGO + "QUEUE_1"
+CELERY_TASK_QUEUES = (kombuQueue(CELERY_NAME_QUEUE, routing_key=CELERY_NAME_QUEUE),)
+
+CELERY_TASK_DEFAULT_QUEUE = CELERY_NAME_QUEUE
+CELERY_TASK_DEFAULT_ROUTING_KEY = CELERY_NAME_QUEUE
+
+CELERY_TASK_ROUTES = {
+    f"{CELERY_NAME_APP_DJANGO}.tasks.*": {"queue": CELERY_NAME_QUEUE},
+}
 
 ACCEPT_CONTENT = ["json"]
 RESULT_SERIALIZER = "json"
