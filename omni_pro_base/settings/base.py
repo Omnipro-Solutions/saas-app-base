@@ -258,3 +258,5 @@ CELERY_SECONDS_TIME_TO_RETRY = env.int("CELERY_SECONDS_TIME_TO_RETRY", default=3
 CELERY_RESULT_EXTENDED = True
 CELERY_CACHE_BACKEND = "django-cache"
 CELERY_RESULT_BACKEND = "django-db"
+
+ASYNC_TIMEOUT = env.int("ASYNC_TIMEOUT", default=30)  # tiempo en segundos
