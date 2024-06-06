@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
     "omni_pro_base",
     "omni_pro_oms",
+    "rangefilter",
 ]
 
 INSTALLED_APPS = THEME_APPS + DJANGO_APPS + THIRD_PARTY_APPS
