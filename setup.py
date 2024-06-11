@@ -32,6 +32,7 @@ INSTALL_REQUIRES = [
     "argon2-cffi==23.1.0",
     "celery==5.3.6",
     "redis==5.0.1",
+    "django-jazzmin-admin-rangefilter==1.0.0",
 ]
 # with open(HERE / "requirements.txt") as f:
 #     INSTALL_REQUIRES = f.read().splitlines()
