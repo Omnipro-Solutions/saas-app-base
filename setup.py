@@ -33,7 +33,8 @@ INSTALL_REQUIRES = [
     "celery==5.3.6",
     "redis==5.0.1",
     "django-jazzmin-admin-rangefilter==1.0.0",
-    "newrelic==9.10.0"
+    "newrelic==9.10.0",
+    "django-celery-beat==2.6.0",
 ]
 # with open(HERE / "requirements.txt") as f:
 #     INSTALL_REQUIRES = f.read().splitlines()
