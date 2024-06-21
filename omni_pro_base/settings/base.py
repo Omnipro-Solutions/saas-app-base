@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = [
     "omni_pro_base",
     "omni_pro_oms",
     "rangefilter",
+    "django_celery_beat",
 ]
 
 INSTALLED_APPS = THEME_APPS + DJANGO_APPS + THIRD_PARTY_APPS
@@ -261,3 +262,6 @@ CELERY_CACHE_BACKEND = "django-cache"
 CELERY_RESULT_BACKEND = "django-db"
 
 ASYNC_TIMEOUT = env.int("ASYNC_TIMEOUT", default=30)  # tiempo en segundos
+
+# CONFIGURATION CELERY BEAT
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
