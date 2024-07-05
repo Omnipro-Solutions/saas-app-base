@@ -45,6 +45,7 @@ THIRD_PARTY_APPS = [
     "omni_pro_oms",
     "rangefilter",
     "django_celery_beat",
+    "import_export",
 ]
 
 INSTALLED_APPS = THEME_APPS + DJANGO_APPS + THIRD_PARTY_APPS
