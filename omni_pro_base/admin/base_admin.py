@@ -12,6 +12,16 @@ class MixinSaveAdmin(object):
 
 class BaseAdmin(MixinSaveAdmin, admin.ModelAdmin):
     exclude = ("created_at", "updated_at")
+    list_per_page = 20
     fieldsets = (
-        (_("Audit Info"), {"fields": ("is_active","created_by", "updated_by", )}),
+        (
+            _("Audit Info"),
+            {
+                "fields": (
+                    "is_active",
+                    "created_by",
+                    "updated_by",
+                )
+            },
+        ),
     )
