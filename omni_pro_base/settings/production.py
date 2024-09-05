@@ -15,13 +15,13 @@ INSTALLED_APPS.insert(DJA, "corsheaders")
 MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
 MIDDLEWARE.insert(4, "corsheaders.middleware.CorsMiddleware")
 
-# whitenoise settings
+# Django storages
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 STATIC_HOST = env.str("DJANGO_STATIC_HOST", default="")
