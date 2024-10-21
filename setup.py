@@ -36,6 +36,7 @@ INSTALL_REQUIRES = [
     "newrelic==9.10.0",
     "django-celery-beat==2.6.0",
     "django-import-export==4.1.0",
+    "django-db-connection-pool==1.2.5",
 ]
 # with open(HERE / "requirements.txt") as f:
 #     INSTALL_REQUIRES = f.read().splitlines()

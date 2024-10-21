@@ -83,7 +83,19 @@ TEMPLATES = [
 DATABASES = {
     "default": env.dj_db_url("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
+
+# Configurar las opciones adicionales para la conexión
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+# Asegurarte de que el motor sea el correcto
+DATABASES["default"]["ENGINE"] = "dj_db_conn_pool.backends.postgresql"
+
+# Agregar las opciones del pool de conexiones
+DATABASES["default"]["POOL_OPTIONS"] = {
+    "POOL_SIZE": 10,  # The number of connections to use in the pool.
+    "MAX_OVERFLOW": 10, # The maximum overflow size of the pool.
+    "RECYCLE": 15 * 60  # 15 minutes
+}
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
@@ -144,7 +156,6 @@ OAUTH2_PROVIDER = {
     "SCOPES": {"read": "Read scope", "write": "Write scope"}
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -203,7 +214,6 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Email
 EMAIL_BACKEND = env.str("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

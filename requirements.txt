@@ -16,3 +16,4 @@ redis==5.0.1
 django-jazzmin-admin-rangefilter==1.0.0
 newrelic==9.10.0
 django-import-export==4.1.0
+django-db-connection-pool==1.2.5
