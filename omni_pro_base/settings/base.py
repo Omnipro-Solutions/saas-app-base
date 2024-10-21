@@ -92,9 +92,9 @@ DATABASES["default"]["ENGINE"] = "dj_db_conn_pool.backends.postgresql"
 
 # Agregar las opciones del pool de conexiones
 DATABASES["default"]["POOL_OPTIONS"] = {
-    "POOL_SIZE": 10,  # The number of connections to use in the pool.
-    "MAX_OVERFLOW": 10, # The maximum overflow size of the pool.
-    "RECYCLE": 15 * 60  # 15 minutes
+    "POOL_SIZE": env.int("POOL_OPTIONS__POOL_SIZE", 10),  # The number of connections to use in the pool.
+    "MAX_OVERFLOW": env.int("POOL_OPTIONS__MAX_OVERFLOW", 10),  # The maximum overflow size of the pool.
+    "RECYCLE": env.int("POOL_OPTIONS__RECYCLE", 5 * 60),  # 15 minutes
 }
 
 # Jazzmin settings
