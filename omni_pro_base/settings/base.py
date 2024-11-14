@@ -266,3 +266,31 @@ ASYNC_TIMEOUT = env.int("ASYNC_TIMEOUT", default=30)  # tiempo en segundos
 
 # CONFIGURATION CELERY BEAT
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# CONFIGURATION LOGGING
+LOGGING_LEVEL = env.str("LOGGING_LEVEL", default="INFO")
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{levelname}] - [{asctime}]: {name} in line {lineno} - {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        # "file": {  # Handler for logging to a file
+        #     "class": "logging.FileHandler",
+        #     "filename": "debug.log",
+        #     "formatter": "verbose",
+        # },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": LOGGING_LEVEL,
+    },
+}
