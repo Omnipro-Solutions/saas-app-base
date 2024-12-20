@@ -16,16 +16,19 @@ MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
 MIDDLEWARE.insert(4, "corsheaders.middleware.CorsMiddleware")
 
 # whitenoise settings
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-STATIC_HOST = env.str("DJANGO_STATIC_HOST", default="")
-STATIC_URL = STATIC_HOST + "/static/"
+# STORAGES = {
+#     "default": {
+#         "BACKEND": "django.core.files.storage.FileSystemStorage",
+#     },
+#     "staticfiles": {
+#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+#     },
+# }
+# STATIC_HOST = env.str("DJANGO_STATIC_HOST", default="")
+# STATIC_URL = STATIC_HOST + "/static/"
+
+# STATIC_URL = "/static/"
+# STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Cache
 # TODO: falta por implementar

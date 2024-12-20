@@ -218,12 +218,15 @@ EMAIL_BACKEND = env.str("DJANGO_EMAIL_BACKEND", default="django.core.mail.backen
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# STATIC_URL = env.str("STATIC_URL", default="static/")
+# STATIC_ROOT = env.str("STATIC_ROOT", default=str(BASE_DIR / "staticfiles/"))
+# STATICFILES_FINDERS = [
+#     "django.contrib.staticfiles.finders.FileSystemFinder",
+#     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+# ]
+
 STATIC_URL = env.str("STATIC_URL", default="static/")
-STATIC_ROOT = env.str("STATIC_ROOT", default=str(BASE_DIR / "staticfiles/"))
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
+STATIC_ROOT = env.str("STATIC_ROOT", default="/app/staticfiles")
 
 MEDIA_URL = env.str("MEDIA_URL", default="media/")
 MEDIA_ROOT = env.str("MEDIA_ROOT", default=str(BASE_DIR / "media/"))
