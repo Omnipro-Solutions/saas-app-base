@@ -247,10 +247,23 @@ CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://127.0.0.1:6379
 # QUEUE
 # Celery settings
 CELERY_NAME_QUEUE = CELERY_NAME_APP_DJANGO + "QUEUE_1"
-CELERY_TASK_QUEUES = (kombuQueue(CELERY_NAME_QUEUE, routing_key=CELERY_NAME_QUEUE),)
+CELERY_HIGH_PRIORITY_QUEUE = CELERY_NAME_APP_DJANGO + "QUEUE_2"
 
 CELERY_TASK_DEFAULT_QUEUE = CELERY_NAME_QUEUE
 CELERY_TASK_DEFAULT_ROUTING_KEY = CELERY_NAME_QUEUE
+
+CELERY_TASK_QUEUES = [
+    kombuQueue(
+        CELERY_NAME_QUEUE,
+        routing_key=CELERY_NAME_QUEUE,
+        queue_arguments={"x-max-priority": 10},
+    ),
+    kombuQueue(
+        CELERY_HIGH_PRIORITY_QUEUE,
+        routing_key=CELERY_HIGH_PRIORITY_QUEUE,
+        queue_arguments={"x-max-priority": 10},
+    ),
+]
 
 CELERY_TASK_ROUTES = {
     f"{CELERY_NAME_APP_DJANGO}.tasks.*": {"queue": CELERY_NAME_QUEUE},
