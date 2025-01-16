@@ -266,3 +266,13 @@ ASYNC_TIMEOUT = env.int("ASYNC_TIMEOUT", default=30)  # tiempo en segundos
 
 # CONFIGURATION CELERY BEAT
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# CONFIGURATION EMAIL
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env.str("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_USE_SSL = True
+
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default="smtp_user")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default="smtp_password")
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="smtp_email")
