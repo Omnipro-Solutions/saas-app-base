@@ -246,28 +246,54 @@ CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://127.0.0.1:6379
 
 # QUEUE
 # Celery settings
-CELERY_NAME_QUEUE = CELERY_NAME_APP_DJANGO + "QUEUE_1"
-CELERY_HIGH_PRIORITY_QUEUE = CELERY_NAME_APP_DJANGO + "QUEUE_2"
+QUEUE_CRITICAL = "critical"
+QUEUE_HIGH = "high"
+QUEUE_MEDIUM = "medium"
+QUEUE_LOW = "low"
+QUEUE_VERY_LOW = "very_low"
 
-CELERY_TASK_DEFAULT_QUEUE = CELERY_NAME_QUEUE
-CELERY_TASK_DEFAULT_ROUTING_KEY = CELERY_NAME_QUEUE
+CELERY_NAME_QUEUE = QUEUE_MEDIUM
+CELERY_HIGH_PRIORITY_QUEUE = QUEUE_MEDIUM
+
+CELERY_TASK_DEFAULT_QUEUE = QUEUE_LOW
+CELERY_TASK_DEFAULT_ROUTING_KEY = QUEUE_LOW
 
 CELERY_TASK_QUEUES = [
     kombuQueue(
-        CELERY_NAME_QUEUE,
-        routing_key=CELERY_NAME_QUEUE,
-        queue_arguments={"x-max-priority": 10},
+        name=QUEUE_CRITICAL,
+        exchange=QUEUE_CRITICAL,
+        routing_key=QUEUE_CRITICAL,
     ),
     kombuQueue(
-        CELERY_HIGH_PRIORITY_QUEUE,
-        routing_key=CELERY_HIGH_PRIORITY_QUEUE,
-        queue_arguments={"x-max-priority": 10},
+        name=QUEUE_HIGH,
+        exchange=QUEUE_HIGH,
+        routing_key=QUEUE_HIGH,
+    ),
+    kombuQueue(
+        name=QUEUE_MEDIUM,
+        exchange=QUEUE_MEDIUM,
+        routing_key=QUEUE_MEDIUM,
+    ),
+    kombuQueue(
+        name=QUEUE_LOW,
+        exchange=QUEUE_LOW,
+        routing_key=QUEUE_LOW,
+    ),
+    kombuQueue(
+        name=QUEUE_VERY_LOW,
+        exchange=QUEUE_VERY_LOW,
+        routing_key=QUEUE_VERY_LOW,
     ),
 ]
-
 CELERY_TASK_ROUTES = {
-    f"{CELERY_NAME_APP_DJANGO}.tasks.*": {"queue": CELERY_NAME_QUEUE},
+    f"{CELERY_NAME_APP_DJANGO}.tasks.critical_*": {"queue": QUEUE_CRITICAL, "routing_key": QUEUE_CRITICAL},
+    f"{CELERY_NAME_APP_DJANGO}.tasks.high_*": {"queue": QUEUE_HIGH, "routing_key": QUEUE_HIGH},
+    f"{CELERY_NAME_APP_DJANGO}.tasks.medium_*": {"queue": QUEUE_MEDIUM, "routing_key": QUEUE_MEDIUM},
+    f"{CELERY_NAME_APP_DJANGO}.tasks.low_*": {"queue": QUEUE_LOW, "routing_key": QUEUE_LOW},
+    f"{CELERY_NAME_APP_DJANGO}.tasks.very_low_*": {"queue": QUEUE_VERY_LOW, "routing_key": QUEUE_VERY_LOW},
 }
+
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 ACCEPT_CONTENT = ["json"]
 RESULT_SERIALIZER = "json"
