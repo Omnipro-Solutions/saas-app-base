@@ -6,8 +6,8 @@ from omni_pro_base.models.base_model import OmniModel
 
 class User(AbstractUser, OmniModel):
     email = models.EmailField(_("email address"), unique=True)
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     @property
     def name(self):
