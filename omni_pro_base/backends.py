@@ -42,11 +42,11 @@ class SettingsBackend(BaseBackend):
 
 
 class AppUserBackend(BaseBackend):
-
     def authenticate(self, request, username=None, password=None):
         try:
+            url = f"{settings.AUTH_BASE_URL}/auth/users/login/"
             response = requests.post(
-                settings.AUTH_APP_SERVICE_URL,
+                url,
                 json={"email": username, "password": password},
             )
             response.raise_for_status()
