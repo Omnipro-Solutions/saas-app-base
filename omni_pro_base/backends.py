@@ -42,7 +42,6 @@ class SettingsBackend(BaseBackend):
 
 
 class AppUserBackend(BaseBackend):
-
     def authenticate(self, request, username=None, password=None):
         try:
             response = requests.post(

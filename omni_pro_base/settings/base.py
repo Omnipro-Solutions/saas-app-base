@@ -12,7 +12,10 @@ env.read_env()
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("SECRET_KEY", default="django-insecure--fspfc--yg!p^)bi--2brjgyzb^fmu-3bh-#xxmb7gye7(b1-f")
+SECRET_KEY = env.str(
+    "SECRET_KEY",
+    default="django-insecure--fspfc--yg!p^)bi--2brjgyzb^fmu-3bh-#xxmb7gye7(b1-f",
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -83,7 +86,23 @@ TEMPLATES = [
 DATABASES = {
     "default": env.dj_db_url("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
+
+# Configurar las opciones adicionales para la conexión
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+# Asegurarte de que el motor sea el correcto
+DATABASES["default"]["ENGINE"] = "dj_db_conn_pool.backends.postgresql"
+
+# Agregar las opciones del pool de conexiones
+DATABASES["default"]["POOL_OPTIONS"] = {
+    "POOL_SIZE": env.int(
+        "POOL_OPTIONS__POOL_SIZE", 10
+    ),  # The number of connections to use in the pool.
+    "MAX_OVERFLOW": env.int(
+        "POOL_OPTIONS__MAX_OVERFLOW", 10
+    ),  # The maximum overflow size of the pool.
+    "RECYCLE": env.int("POOL_OPTIONS__RECYCLE", 5 * 60),  # 15 minutes
+}
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
@@ -144,7 +163,6 @@ OAUTH2_PROVIDER = {
     "SCOPES": {"read": "Read scope", "write": "Write scope"}
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -184,7 +202,9 @@ ADMIN_USERNAME = env.str("ADMIN_USERNAME", default=ADMIN_LOGIN)
 ADMIN_FIRST_NAME = env.str("ADMIN_FIRST_NAME", default="OMS")
 ADMIN_LAST_NAME = env.str("ADMIN_LAST_NAME", default="OMNI")
 AUTH_BASE_URL = env.str("AUTH_BASE_URL", default="http://localhost:8000")
-AUTH_APP_SERVICE_URL = env.str("AUTH_APP_SERVICE_URL", default=f"{AUTH_BASE_URL}/auth/users/login/")
+AUTH_APP_SERVICE_URL = env.str(
+    "AUTH_APP_SERVICE_URL", default=f"{AUTH_BASE_URL}/auth/users/login/"
+)
 
 AUTHENTICATION_BACKENDS = [
     "omni_pro_base.backends.SettingsBackend",
@@ -202,18 +222,22 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Email
-EMAIL_BACKEND = env.str("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
-
+EMAIL_BACKEND = env.str(
+    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# STATIC_URL = env.str("STATIC_URL", default="static/")
+# STATIC_ROOT = env.str("STATIC_ROOT", default=str(BASE_DIR / "staticfiles/"))
+# STATICFILES_FINDERS = [
+#     "django.contrib.staticfiles.finders.FileSystemFinder",
+#     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+# ]
+
 STATIC_URL = env.str("STATIC_URL", default="static/")
-STATIC_ROOT = env.str("STATIC_ROOT", default=str(BASE_DIR / "staticfiles/"))
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
+STATIC_ROOT = env.str("STATIC_ROOT", default="/app/staticfiles")
 
 MEDIA_URL = env.str("MEDIA_URL", default="media/")
 MEDIA_ROOT = env.str("MEDIA_ROOT", default=str(BASE_DIR / "media/"))
@@ -236,15 +260,69 @@ CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://127.0.0.1:6379
 
 # QUEUE
 # Celery settings
-CELERY_NAME_QUEUE = CELERY_NAME_APP_DJANGO + "QUEUE_1"
-CELERY_TASK_QUEUES = (kombuQueue(CELERY_NAME_QUEUE, routing_key=CELERY_NAME_QUEUE),)
+QUEUE_CRITICAL = "critical"
+QUEUE_HIGH = "high"
+QUEUE_MEDIUM = "medium"
+QUEUE_LOW = "low"
+QUEUE_VERY_LOW = "very_low"
 
-CELERY_TASK_DEFAULT_QUEUE = CELERY_NAME_QUEUE
-CELERY_TASK_DEFAULT_ROUTING_KEY = CELERY_NAME_QUEUE
+CELERY_NAME_QUEUE = QUEUE_MEDIUM
+CELERY_HIGH_PRIORITY_QUEUE = QUEUE_MEDIUM
 
+CELERY_TASK_DEFAULT_QUEUE = QUEUE_LOW
+CELERY_TASK_DEFAULT_ROUTING_KEY = QUEUE_LOW
+
+CELERY_TASK_QUEUES = [
+    kombuQueue(
+        name=QUEUE_CRITICAL,
+        exchange=QUEUE_CRITICAL,
+        routing_key=QUEUE_CRITICAL,
+    ),
+    kombuQueue(
+        name=QUEUE_HIGH,
+        exchange=QUEUE_HIGH,
+        routing_key=QUEUE_HIGH,
+    ),
+    kombuQueue(
+        name=QUEUE_MEDIUM,
+        exchange=QUEUE_MEDIUM,
+        routing_key=QUEUE_MEDIUM,
+    ),
+    kombuQueue(
+        name=QUEUE_LOW,
+        exchange=QUEUE_LOW,
+        routing_key=QUEUE_LOW,
+    ),
+    kombuQueue(
+        name=QUEUE_VERY_LOW,
+        exchange=QUEUE_VERY_LOW,
+        routing_key=QUEUE_VERY_LOW,
+    ),
+]
 CELERY_TASK_ROUTES = {
-    f"{CELERY_NAME_APP_DJANGO}.tasks.*": {"queue": CELERY_NAME_QUEUE},
+    f"{CELERY_NAME_APP_DJANGO}.tasks.critical_*": {
+        "queue": QUEUE_CRITICAL,
+        "routing_key": QUEUE_CRITICAL,
+    },
+    f"{CELERY_NAME_APP_DJANGO}.tasks.high_*": {
+        "queue": QUEUE_HIGH,
+        "routing_key": QUEUE_HIGH,
+    },
+    f"{CELERY_NAME_APP_DJANGO}.tasks.medium_*": {
+        "queue": QUEUE_MEDIUM,
+        "routing_key": QUEUE_MEDIUM,
+    },
+    f"{CELERY_NAME_APP_DJANGO}.tasks.low_*": {
+        "queue": QUEUE_LOW,
+        "routing_key": QUEUE_LOW,
+    },
+    f"{CELERY_NAME_APP_DJANGO}.tasks.very_low_*": {
+        "queue": QUEUE_VERY_LOW,
+        "routing_key": QUEUE_VERY_LOW,
+    },
 }
+
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 ACCEPT_CONTENT = ["json"]
 RESULT_SERIALIZER = "json"
@@ -266,6 +344,34 @@ ASYNC_TIMEOUT = env.int("ASYNC_TIMEOUT", default=30)  # tiempo en segundos
 
 # CONFIGURATION CELERY BEAT
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# CONFIGURATION LOGGING
+LOGGING_LEVEL = env.str("LOGGING_LEVEL", default="INFO")
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{levelname}] - [{asctime}]: {name} in line {lineno} - {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        # "file": {  # Handler for logging to a file
+        #     "class": "logging.FileHandler",
+        #     "filename": "debug.log",
+        #     "formatter": "verbose",
+        # },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": LOGGING_LEVEL,
+    },
+}
 
 # CONFIGURATION EMAIL
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
