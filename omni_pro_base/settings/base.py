@@ -93,16 +93,24 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # Asegurarte de que el motor sea el correcto
 DATABASES["default"]["ENGINE"] = "dj_db_conn_pool.backends.postgresql"
 
-# Agregar las opciones del pool de conexiones
-DATABASES["default"]["POOL_OPTIONS"] = {
-    "POOL_SIZE": env.int(
-        "POOL_OPTIONS__POOL_SIZE", 10
-    ),  # The number of connections to use in the pool.
-    "MAX_OVERFLOW": env.int(
-        "POOL_OPTIONS__MAX_OVERFLOW", 10
-    ),  # The maximum overflow size of the pool.
-    "RECYCLE": env.int("POOL_OPTIONS__RECYCLE", 5 * 60),  # 15 minutes
+POOL_OPTIONS = {
+    # Igual o un poco más que tus workers (si tienes el default de 4 workers)
+    "POOL_SIZE": env.int("POOL_OPTIONS__POOL_SIZE", 5),
+    # Permite un pequeño pico, pero no masivo (duplica el tamaño base)
+    "MAX_OVERFLOW": env.int("POOL_OPTIONS__MAX_OVERFLOW", 5),
+    # Timeout corto para fallar rápido si no hay conexiones disponibles
+    "TIMEOUT": env.int("POOL_OPTIONS__TIMEOUT", 5),  # Quizás un poco más que 2s si hay contención
+    # Recicla conexiones cada 10 minutos para evitar problemas de red/stale connections
+    "RECYCLE": env.int("POOL_OPTIONS__RECYCLE", 600),
+    # Cierra conexiones de overflow inactivas después de 5 minutos
+    "IDLE_TIMEOUT": env.int("POOL_OPTIONS__IDLE_TIMEOUT", 300),
+    # Importante: Pre-ping para verificar la conexión antes de usarla
+    "PRE_PING": env.bool("POOL_OPTIONS__PRE_PING", default=True),
 }
+
+# Agregar las opciones del pool de conexiones
+DATABASES["default"]["POOL_OPTIONS"] = POOL_OPTIONS
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("DATABASES__CONN_MAX_AGE", 0)
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
@@ -160,7 +168,11 @@ REST_FRAMEWORK = {
 
 OAUTH2_PROVIDER = {
     # this is the list of available scopes
-    "SCOPES": {"read": "Read scope", "write": "Write scope"}
+    "SCOPES": {"read": "Read scope", "write": "Write scope"},
+    # Tiempo de expiración para el access token (en segundos)
+    "ACCESS_TOKEN_EXPIRE_SECONDS": env.int("OAUTH2_PROVIDER__TOKEN_EXPIRE_SECONDS", 60 * 60),  # 1 hora
+    # Tiempo de expiración para el ID token (en segundos)
+    "ID_TOKEN_EXPIRE_SECONDS": env.int("OAUTH2_PROVIDER__TOKEN_EXPIRE_SECONDS", 60 * 60),  # 1 hora
 }
 
 # Password validation
@@ -202,9 +214,7 @@ ADMIN_USERNAME = env.str("ADMIN_USERNAME", default=ADMIN_LOGIN)
 ADMIN_FIRST_NAME = env.str("ADMIN_FIRST_NAME", default="OMS")
 ADMIN_LAST_NAME = env.str("ADMIN_LAST_NAME", default="OMNI")
 AUTH_BASE_URL = env.str("AUTH_BASE_URL", default="http://localhost:8000")
-AUTH_APP_SERVICE_URL = env.str(
-    "AUTH_APP_SERVICE_URL", default=f"{AUTH_BASE_URL}/auth/users/login/"
-)
+AUTH_APP_SERVICE_URL = env.str("AUTH_APP_SERVICE_URL", default=f"{AUTH_BASE_URL}/auth/users/login/")
 
 AUTHENTICATION_BACKENDS = [
     "omni_pro_base.backends.SettingsBackend",
@@ -222,9 +232,7 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Email
-EMAIL_BACKEND = env.str(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
-)
+EMAIL_BACKEND = env.str("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
