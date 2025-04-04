@@ -93,12 +93,24 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # Asegurarte de que el motor sea el correcto
 DATABASES["default"]["ENGINE"] = "dj_db_conn_pool.backends.postgresql"
 
-# Agregar las opciones del pool de conexiones
-DATABASES["default"]["POOL_OPTIONS"] = {
-    "POOL_SIZE": env.int("POOL_OPTIONS__POOL_SIZE", 10),  # The number of connections to use in the pool.
-    "MAX_OVERFLOW": env.int("POOL_OPTIONS__MAX_OVERFLOW", 10),  # The maximum overflow size of the pool.
-    "RECYCLE": env.int("POOL_OPTIONS__RECYCLE", 5 * 60),  # 15 minutes
+POOL_OPTIONS = {
+    # Igual o un poco más que tus workers (si tienes el default de 4 workers)
+    "POOL_SIZE": env.int("POOL_OPTIONS__POOL_SIZE", 5),
+    # Permite un pequeño pico, pero no masivo (duplica el tamaño base)
+    "MAX_OVERFLOW": env.int("POOL_OPTIONS__MAX_OVERFLOW", 5),
+    # Timeout corto para fallar rápido si no hay conexiones disponibles
+    "TIMEOUT": env.int("POOL_OPTIONS__TIMEOUT", 5),  # Quizás un poco más que 2s si hay contención
+    # Recicla conexiones cada 10 minutos para evitar problemas de red/stale connections
+    "RECYCLE": env.int("POOL_OPTIONS__RECYCLE", 600),
+    # Cierra conexiones de overflow inactivas después de 5 minutos
+    "IDLE_TIMEOUT": env.int("POOL_OPTIONS__IDLE_TIMEOUT", 300),
+    # Importante: Pre-ping para verificar la conexión antes de usarla
+    "PRE_PING": env.bool("POOL_OPTIONS__PRE_PING", default=True),
 }
+
+# Agregar las opciones del pool de conexiones
+DATABASES["default"]["POOL_OPTIONS"] = POOL_OPTIONS
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("DATABASES__CONN_MAX_AGE", 0)
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
