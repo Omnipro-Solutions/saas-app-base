@@ -16,6 +16,7 @@ URL = "https://github.com/Omnipro-Solutions/saas-app-base"
 INSTALL_REQUIRES = [
     "Django==5.0",
     "environs==9.5.0",
+    "marshmallow==3.26.1",
     "django-jazzmin==3.0.0",
     "djangorestframework==3.14.0",
     "django-oauth-toolkit==2.3.0",
