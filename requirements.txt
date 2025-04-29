@@ -6,6 +6,7 @@ djangorestframework==3.14.0
 django-oauth-toolkit==2.3.0 # Tokenización endpoints, vistas
 django-allow-cidr==0.7.1
 django-health-check==3.18.1
+django-cors-headers==4.7.0
 dj-database-url==2.1.0
 django-celery-results==2.5.1
 psycopg2-binary==2.9.9
