@@ -24,6 +24,7 @@ INSTALL_REQUIRES = [
     "django-health-check==3.18.1",
     "django-celery-results==2.5.1",
     "django-json-widget==2.0.1",
+    "django-cors-headers==4.7.0",
     "requests==2.31.0",
     "requests-oauthlib==2.0.0",
     "dj-database-url==2.1.0",

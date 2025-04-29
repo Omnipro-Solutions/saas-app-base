@@ -14,6 +14,9 @@ INSTALLED_APPS.insert(DJA, "corsheaders")
 
 MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
 MIDDLEWARE.insert(4, "corsheaders.middleware.CorsMiddleware")
+MIDDLEWARE.insert(5, "django.middleware.common.CommonMiddleware")
+
+CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=True)
 
 # whitenoise settings
 # STORAGES = {
