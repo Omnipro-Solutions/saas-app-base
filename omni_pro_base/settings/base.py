@@ -249,6 +249,9 @@ CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://127.0.0.1:6379
 
 # QUEUE
 # Celery settings
+# Prefixing queue names with CELERY_NAME_APP_DJANGO ensures that all queues are scoped
+# to this specific Django application, avoiding naming conflicts in shared environments
+# or multi-application setups.
 QUEUE_CRITICAL = f"{CELERY_NAME_APP_DJANGO}.critical"
 QUEUE_HIGH = f"{CELERY_NAME_APP_DJANGO}.high"
 QUEUE_MEDIUM = f"{CELERY_NAME_APP_DJANGO}.medium"
