@@ -87,6 +87,10 @@ DATABASES = {
     "default": env.dj_db_url("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
 
+DATABASES["default"]["OPTIONS"] = {
+    "pool": True,
+}
+
 # Configurar las opciones adicionales para la conexión
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
