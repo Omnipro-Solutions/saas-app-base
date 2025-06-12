@@ -88,7 +88,11 @@ DATABASES = {
 }
 
 DATABASES["default"]["OPTIONS"] = {
-    "pool": True,
+    "pool": {
+        "min_size": env.int("DATABASE_POOL_MIN_SIZE", default=8),
+        "max_size": env.int("DATABASE_POOL_MAX_SIZE", default=16),
+        "max_idle": env.int("DATABASE_POOL_MAX_IDLE", default=120),
+    },
 }
 
 # Configurar las opciones adicionales para la conexión
