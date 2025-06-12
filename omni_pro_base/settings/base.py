@@ -87,15 +87,9 @@ DATABASES = {
     "default": env.dj_db_url("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
 
-DATABASES["default"]["OPTIONS"] = {
-    "pool": {
-        "min_size": env.int("DATABASE_POOL_MIN_SIZE", default=8),
-        "max_size": env.int("DATABASE_POOL_MAX_SIZE", default=16),
-    },
-}
-
 # Configurar las opciones adicionales para la conexión
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES["default"]["CONN_MAX_AGE"] = 0
 
 # Asegurarte de que el motor sea el correcto
 DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql"
